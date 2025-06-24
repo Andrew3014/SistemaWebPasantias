@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Registro de Estudiante</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/register">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="apellido" name="apellido" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo electrónico UPDS</label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               placeholder="cb.nombre.apellido@upds.net.bo" required>
+                        <div class="form-text">Usa tu correo institucional</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div class="form-text">Mínimo 8 caracteres</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="carrera" class="form-label">Carrera</label>
+                            <select class="form-select" id="carrera" name="carrera" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Ingeniería de Sistemas">Ingeniería de Sistemas</option>
+                                <option value="Ingeniería Civil">Ingeniería Civil</option>
+                                <option value="Administración de Empresas">Administración de Empresas</option>
+                                <option value="Derecho">Derecho</option>
+                                <option value="Contaduría Pública">Contaduría Pública</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+                </form>
+                <div class="mt-3 text-center">
+                    <p>¿Ya tienes una cuenta? <a href="/login">Inicia sesión aquí</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

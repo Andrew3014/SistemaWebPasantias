@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Bienvenido al Sistema de Prácticas UPDS</h4>
+            </div>
+            <div class="card-body">
+                <p>Este sistema permite a los estudiantes de la Universidad Privada Domingo Savio gestionar y postularse a prácticas profesionales.</p>
+                <div class="d-flex justify-content-center mt-4">
+                    <a href="/login" class="btn btn-primary mx-2">Iniciar Sesión</a>
+                    <a href="/register" class="btn btn-outline-primary mx-2">Registrarse</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
