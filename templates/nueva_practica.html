@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Nueva Práctica</h3>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="titulo" class="form-label">Título</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" required>
+        </div>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="empresa" class="form-label">Empresa</label>
+            <input type="text" class="form-control" id="empresa" name="empresa" required>
+        </div>
+        <div class="mb-3">
+            <label for="area" class="form-label">Área</label>
+            <input type="text" class="form-control" id="area" name="area" required>
+        </div>
+        <div class="mb-3">
+            <label for="requisitos" class="form-label">Requisitos</label>
+            <textarea class="form-control" id="requisitos" name="requisitos" rows="2" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="duracion" class="form-label">Duración</label>
+            <input type="text" class="form-control" id="duracion" name="duracion" required>
+        </div>
+        <div class="mb-3">
+            <label for="contacto" class="form-label">Contacto</label>
+            <input type="text" class="form-control" id="contacto" name="contacto" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Crear</button>
+        <a href="{{ url_for('admin') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

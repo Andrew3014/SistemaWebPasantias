@@ -1,13 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="portada-img-container mb-4">
+    <img src="/static/images/portada.png" alt="Portada" class="img-fluid rounded shadow-sm w-100" style="max-height: 220px; object-fit: cover;">
+</div>
+
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Bienvenido, {{ nombre }}</h2>
-    {% if rol == 'admin' %}
-    <a href="{{ url_for('admin') }}" class="btn btn-primary">
-        <i class="bi bi-gear"></i> Panel de Administración
-    </a>
-    {% endif %}
+    <div>
+        {% if rol == 'admin' %}
+        <a href="{{ url_for('admin') }}" class="btn btn-primary">
+            <i class="bi bi-gear"></i> Panel de Administración
+        </a>
+        {% endif %}
+        {% if rol == 'estudiante' %}
+        <a href="{{ url_for('mis_postulaciones') }}" class="btn btn-outline-info ms-2">
+            <i class="bi bi-list-check"></i> Mis Postulaciones
+        </a>
+        {% endif %}
+    </div>
 </div>
 
 <div class="row">
@@ -38,7 +49,11 @@
                 <p><strong>Contacto:</strong> {{ practica.contacto }}</p>
             </div>
             <div class="card-footer bg-transparent">
-                <button class="btn btn-outline-primary">Postularme</button>
+                {% if rol == 'estudiante' %}
+                <form action="{{ url_for('postular_practica', practica_id=practica.id) }}" method="POST">
+                    <button class="btn btn-outline-primary w-100" type="submit">Postularme</button>
+                </form>
+                {% endif %}
             </div>
         </div>
     </div>

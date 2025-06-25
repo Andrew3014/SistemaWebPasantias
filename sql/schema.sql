@@ -24,3 +24,13 @@ CREATE TABLE practicas (
     contacto VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS postulaciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    practica_id INT NOT NULL,
+    fecha_postulacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado ENUM('pendiente', 'aceptada', 'rechazada') DEFAULT 'pendiente',
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (practica_id) REFERENCES practicas(id) ON DELETE CASCADE
+);

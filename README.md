@@ -1,3 +1,16 @@
+# Sistema Web de Gestión de Prácticas Pre-Profesionales (UPDS)
+
+**Objetivo Principal:**
+Automatizar el proceso de postulación y seguimiento de prácticas profesionales para estudiantes, docentes y empresas, reemplazando el sistema manual basado en Google Drive y correos electrónicos.
+
+**Tecnologías utilizadas:**
+- Flask (backend)
+- MySQL (base de datos)
+- Podman (contenedorización)
+- Bootstrap (frontend)
+
+---
+
 # Sistema de Prácticas Profesionales UPDS
 
 Este proyecto es un sistema web para la gestión de prácticas profesionales de la Universidad Privada Domingo Savio, desarrollado con Flask, MySQL y Podman.
@@ -61,9 +74,21 @@ Este proyecto es un sistema web para la gestión de prácticas profesionales de 
    ```
 7. Accede a la aplicación en [http://localhost:5000](http://localhost:5000)
 
-## Acceso administrador
-- Usuario: `admin@upds.edu.bo`
-- Contraseña: `admin123` (si la cambiaste, usa la nueva)
+## Importante para pruebas y desarrollo
+
+- Asegúrate de ejecutar **todo el script `sql/schema.sql`** para crear todas las tablas necesarias, incluyendo `postulaciones`.
+- Puedes cargar datos de ejemplo ejecutando también `sql/data.sql` en la base de datos `upds_practicas`.
+- El usuario administrador por defecto es:
+  - Usuario: `admin@upds.edu.bo`
+  - Contraseña: `admin123`
+- Rutas principales:
+  - `/admin` — Panel de administración (solo admin)
+  - `/dashboard` — Dashboard de usuario
+  - `/mis-postulaciones` — Postulaciones del usuario
+
+## Pruebas automáticas
+
+Si deseas automatizar pruebas (por ejemplo, con Robot Framework), asegúrate de que la base de datos esté limpia y con datos de prueba antes de cada test.
 
 ## Comandos útiles con Docker
 

@@ -17,6 +17,7 @@ app.config['MYSQL_USER'] = 'upds'
 app.config['MYSQL_PASSWORD'] = 'upds123'
 app.config['MYSQL_DB'] = 'upds_practicas'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+app.config['MYSQL_CHARSET'] = 'utf8mb4'  # Asegura la codificación correcta
 
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
@@ -115,6 +116,172 @@ def dashboard():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+@app.route('/admin/usuarios/edit/<int:user_id>', methods=['GET', 'POST'])
+def edit_usuario(user_id):
+    if 'loggedin' not in session or session['rol'] != 'admin':
+        return redirect(url_for('login'))
+    cursor = mysql.connection.cursor()
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        apellido = request.form['apellido']
+        email = request.form['email']
+        telefono = request.form['telefono']
+        carrera = request.form['carrera']
+        rol = request.form['rol']
+        try:
+            cursor.execute('''
+                UPDATE usuarios SET nombre=%s, apellido=%s, email=%s, telefono=%s, carrera=%s, rol=%s WHERE id=%s
+            ''', (nombre, apellido, email, telefono, carrera, rol, user_id))
+            mysql.connection.commit()
+            flash('Usuario actualizado correctamente', 'success')
+            return redirect(url_for('admin'))
+        except Exception as e:
+            mysql.connection.rollback()
+            flash('Error al actualizar usuario', 'danger')
+    cursor.execute('SELECT * FROM usuarios WHERE id = %s', (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    return render_template('edit_usuario.html', user=user)
+
+@app.route('/admin/usuarios/delete/<int:user_id>', methods=['POST'])
+def delete_usuario(user_id):
+    if 'loggedin' not in session or session['rol'] != 'admin':
+        return redirect(url_for('login'))
+    cursor = mysql.connection.cursor()
+    try:
+        cursor.execute('DELETE FROM usuarios WHERE id = %s', (user_id,))
+        mysql.connection.commit()
+        flash('Usuario eliminado correctamente', 'success')
+    except Exception as e:
+        mysql.connection.rollback()
+        flash('Error al eliminar usuario', 'danger')
+    finally:
+        cursor.close()
+    return redirect(url_for('admin'))
+
+@app.route('/admin/practicas/new', methods=['GET', 'POST'])
+def nueva_practica():
+    if 'loggedin' not in session or session['rol'] != 'admin':
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        titulo = request.form['titulo']
+        descripcion = request.form['descripcion']
+        empresa = request.form['empresa']
+        area = request.form['area']
+        requisitos = request.form['requisitos']
+        duracion = request.form['duracion']
+        contacto = request.form['contacto']
+        cursor = mysql.connection.cursor()
+        try:
+            cursor.execute('''
+                INSERT INTO practicas (titulo, descripcion, empresa, area, requisitos, duracion, contacto)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ''', (titulo, descripcion, empresa, area, requisitos, duracion, contacto))
+            mysql.connection.commit()
+            flash('Práctica creada correctamente', 'success')
+            return redirect(url_for('admin'))
+        except Exception as e:
+            mysql.connection.rollback()
+            flash('Error al crear la práctica', 'danger')
+        finally:
+            cursor.close()
+    return render_template('nueva_practica.html')
+
+@app.route('/admin/practicas/edit/<int:practica_id>', methods=['GET', 'POST'])
+def editar_practica(practica_id):
+    if 'loggedin' not in session or session['rol'] != 'admin':
+        return redirect(url_for('login'))
+    cursor = mysql.connection.cursor()
+    if request.method == 'POST':
+        titulo = request.form['titulo']
+        descripcion = request.form['descripcion']
+        empresa = request.form['empresa']
+        area = request.form['area']
+        requisitos = request.form['requisitos']
+        duracion = request.form['duracion']
+        contacto = request.form['contacto']
+        try:
+            cursor.execute('''
+                UPDATE practicas SET titulo=%s, descripcion=%s, empresa=%s, area=%s, requisitos=%s, duracion=%s, contacto=%s WHERE id=%s
+            ''', (titulo, descripcion, empresa, area, requisitos, duracion, contacto, practica_id))
+            mysql.connection.commit()
+            flash('Práctica actualizada correctamente', 'success')
+            return redirect(url_for('admin'))
+        except Exception as e:
+            mysql.connection.rollback()
+            flash('Error al actualizar la práctica', 'danger')
+    cursor.execute('SELECT * FROM practicas WHERE id = %s', (practica_id,))
+    practica = cursor.fetchone()
+    cursor.close()
+    return render_template('editar_practica.html', practica=practica)
+
+@app.route('/admin/practicas/delete/<int:practica_id>', methods=['POST'])
+def eliminar_practica(practica_id):
+    if 'loggedin' not in session or session['rol'] != 'admin':
+        return redirect(url_for('login'))
+    cursor = mysql.connection.cursor()
+    try:
+        cursor.execute('DELETE FROM practicas WHERE id = %s', (practica_id,))
+        mysql.connection.commit()
+        flash('Práctica eliminada correctamente', 'success')
+    except Exception as e:
+        mysql.connection.rollback()
+        flash('Error al eliminar la práctica', 'danger')
+    finally:
+        cursor.close()
+    return redirect(url_for('admin'))
+
+@app.route('/postular/<int:practica_id>', methods=['POST'])
+def postular_practica(practica_id):
+    if 'loggedin' not in session or session['rol'] != 'estudiante':
+        return redirect(url_for('login'))
+    usuario_id = session['id']
+    cursor = mysql.connection.cursor()
+    # Verificar si ya está postulado
+    cursor.execute('SELECT * FROM postulaciones WHERE usuario_id=%s AND practica_id=%s', (usuario_id, practica_id))
+    existe = cursor.fetchone()
+    if existe:
+        flash('Ya te has postulado a esta práctica.', 'warning')
+        cursor.close()
+        return redirect(url_for('dashboard'))
+    try:
+        cursor.execute('INSERT INTO postulaciones (usuario_id, practica_id) VALUES (%s, %s)', (usuario_id, practica_id))
+        mysql.connection.commit()
+        flash('¡Postulación realizada correctamente!', 'success')
+    except Exception as e:
+        mysql.connection.rollback()
+        flash('Error al postularse.', 'danger')
+    finally:
+        cursor.close()
+    return redirect(url_for('dashboard'))
+
+@app.route('/mis-postulaciones')
+def mis_postulaciones():
+    if 'loggedin' not in session or session['rol'] != 'estudiante':
+        return redirect(url_for('login'))
+    usuario_id = session['id']
+    cursor = mysql.connection.cursor()
+    cursor.execute('''
+        SELECT p.*, po.estado, po.fecha_postulacion
+        FROM postulaciones po
+        JOIN practicas p ON po.practica_id = p.id
+        WHERE po.usuario_id = %s
+        ORDER BY po.fecha_postulacion DESC
+    ''', (usuario_id,))
+    postulaciones = cursor.fetchall()
+    cursor.close()
+    return render_template('mis_postulaciones.html', postulaciones=postulaciones)
+
+@app.context_processor
+def inject_practicas_admin():
+    if 'loggedin' in session and session['rol'] == 'admin':
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM practicas')
+        practicas = cursor.fetchall()
+        cursor.close()
+        return dict(users_practicas=practicas)
+    return dict(users_practicas=[])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

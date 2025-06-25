@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Editar Usuario</h3>
+    <form method="POST">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ user.nombre }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="apellido" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="apellido" name="apellido" value="{{ user.apellido }}" required>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="telefono" name="telefono" value="{{ user.telefono }}">
+        </div>
+        <div class="mb-3">
+            <label for="carrera" class="form-label">Carrera</label>
+            <input type="text" class="form-control" id="carrera" name="carrera" value="{{ user.carrera }}">
+        </div>
+        <div class="mb-3">
+            <label for="rol" class="form-label">Rol</label>
+            <select class="form-select" id="rol" name="rol">
+                <option value="estudiante" {% if user.rol == 'estudiante' %}selected{% endif %}>Estudiante</option>
+                <option value="admin" {% if user.rol == 'admin' %}selected{% endif %}>Admin</option>
+                <option value="empresa" {% if user.rol == 'empresa' %}selected{% endif %}>Empresa</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="{{ url_for('admin') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

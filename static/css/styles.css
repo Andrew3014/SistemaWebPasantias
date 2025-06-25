@@ -43,3 +43,14 @@ body {
     border-radius: 8px;
     padding: 10px 20px;
 }
+
+body.login-bg, body.register-bg, body.index-bg {
+    background: url('/static/images/background-login.png') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Opcional: oscurecer el fondo para mejor contraste */
+.login-bg .card, .register-bg .card, .index-bg .card {
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}

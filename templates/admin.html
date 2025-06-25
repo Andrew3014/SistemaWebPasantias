@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="portada-img-container mb-4">
+    <img src="/static/images/portada.png" alt="Portada" class="img-fluid rounded shadow-sm w-100" style="max-height: 220px; object-fit: cover;">
+</div>
+
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Panel de Administración</h2>
     <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
@@ -23,6 +27,7 @@
                         <th>Apellido</th>
                         <th>Rol</th>
                         <th>Carrera</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,11 +39,55 @@
                         <td>{{ user.apellido }}</td>
                         <td>{{ user.rol }}</td>
                         <td>{{ user.carrera or '-' }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_usuario', user_id=user.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                            <form action="{{ url_for('delete_usuario', user_id=user.id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">Ofertas de Prácticas</h5>
+        <a href="{{ url_for('nueva_practica') }}" class="btn btn-success btn-sm">Nueva Práctica</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Empresa</th>
+                    <th>Área</th>
+                    <th>Duración</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for practica in users_practicas %}
+                <tr>
+                    <td>{{ practica.id }}</td>
+                    <td>{{ practica.titulo }}</td>
+                    <td>{{ practica.empresa }}</td>
+                    <td>{{ practica.area }}</td>
+                    <td>{{ practica.duracion }}</td>
+                    <td>
+                        <a href="{{ url_for('editar_practica', practica_id=practica.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <form action="{{ url_for('eliminar_practica', practica_id=practica.id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('¿Seguro que deseas eliminar esta práctica?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}
