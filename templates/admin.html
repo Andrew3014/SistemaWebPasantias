@@ -5,14 +5,17 @@
     <img src="/static/images/portada.png" alt="Portada" class="img-fluid rounded shadow-sm w-100" style="max-height: 220px; object-fit: cover;">
 </div>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Panel de Administración</h2>
-    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
-        <i class="bi bi-arrow-left"></i> Volver al inicio
-    </a>
+<div class="dashboard-welcome mb-4" style="padding:1.5rem 2rem;">
+    <div>
+        <h2 style="font-weight:700; color:#0d6efd;">Panel de Administración</h2>
+        <div class="mt-2">
+            <a href="{{ url_for('admin_postulaciones') }}" class="btn btn-warning me-2"><i class="bi bi-card-list"></i> Ver Postulaciones</a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
+        </div>
+    </div>
 </div>
 
-<div class="card">
+<div class="card mb-5">
     <div class="card-header bg-primary text-white">
         <h5 class="mb-0">Usuarios Registrados</h5>
     </div>

@@ -24,7 +24,12 @@
         </div>
         <div class="mb-3">
             <label for="carrera" class="form-label">Carrera</label>
-            <input type="text" class="form-control" id="carrera" name="carrera" value="{{ user.carrera }}">
+            <select class="form-select" id="carrera" name="carrera" required>
+                <option value="">Seleccione...</option>
+                {% for c in carreras %}
+                  <option value="{{ c }}" {% if user.carrera == c %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div class="mb-3">
             <label for="rol" class="form-label">Rol</label>
@@ -33,6 +38,11 @@
                 <option value="admin" {% if user.rol == 'admin' %}selected{% endif %}>Admin</option>
                 <option value="empresa" {% if user.rol == 'empresa' %}selected{% endif %}>Empresa</option>
             </select>
+        </div>
+        <div class="mb-3">
+            <label for="nueva_contrasena" class="form-label">Nueva contraseña</label>
+            <input type="password" class="form-control" id="nueva_contrasena" name="nueva_contrasena" placeholder="Dejar vacío para no cambiar">
+            <div class="form-text">Mínimo 8 caracteres. Si no deseas cambiar la contraseña, deja este campo vacío.</div>
         </div>
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         <a href="{{ url_for('admin') }}" class="btn btn-secondary">Cancelar</a>

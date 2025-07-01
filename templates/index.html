@@ -1,17 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center">
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
     <div class="col-md-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Bienvenido al Sistema de Prácticas UPDS</h4>
-            </div>
-            <div class="card-body">
-                <p>Este sistema permite a los estudiantes de la Universidad Privada Domingo Savio gestionar y postularse a prácticas profesionales.</p>
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <img src="/static/images/logo.png" alt="UPDS Prácticas" style="height: 90px;">
+                </div>
+                <h2 class="text-center mb-3" style="font-weight: 700;">Bienvenido a UPDS Prácticas</h2>
+                <p class="lead text-center mb-4" style="font-size: 1.15rem;">
+                    <strong>UPDS Prácticas</strong> es una plataforma web diseñada para los estudiantes de la <strong>Universidad Privada Domingo Savio</strong>.<br>
+                    Aquí podrás encontrar y postularte fácilmente a ofertas de pasantías y prácticas profesionales, conectando tu formación académica con oportunidades reales en empresas e instituciones.
+                </p>
+                <ul class="mb-4" style="font-size: 1.05rem;">
+                    <li>Explora ofertas de prácticas actualizadas y filtradas para tu carrera.</li>
+                    <li>Postúlate de manera sencilla y lleva el control de tus postulaciones.</li>
+                    <li>Acceso exclusivo para estudiantes UPDS.</li>
+                </ul>
                 <div class="d-flex justify-content-center mt-4">
-                    <a href="/login" class="btn btn-primary mx-2">Iniciar Sesión</a>
-                    <a href="/register" class="btn btn-outline-primary mx-2">Registrarse</a>
+                    <a href="/login" class="btn btn-primary mx-2 px-4 py-2">Iniciar Sesión</a>
+                    <a href="/register" class="btn btn-outline-primary mx-2 px-4 py-2">Registrarse</a>
                 </div>
             </div>
         </div>

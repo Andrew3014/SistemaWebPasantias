@@ -5,38 +5,30 @@
     <img src="/static/images/portada.png" alt="Portada" class="img-fluid rounded shadow-sm w-100" style="max-height: 220px; object-fit: cover;">
 </div>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Bienvenido, {{ nombre }}</h2>
+<div class="dashboard-welcome">
     <div>
-        {% if rol == 'admin' %}
-        <a href="{{ url_for('admin') }}" class="btn btn-primary">
-            <i class="bi bi-gear"></i> Panel de Administración
-        </a>
-        {% endif %}
-        {% if rol == 'estudiante' %}
-        <a href="{{ url_for('mis_postulaciones') }}" class="btn btn-outline-info ms-2">
-            <i class="bi bi-list-check"></i> Mis Postulaciones
-        </a>
-        {% endif %}
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-4 mb-4">
-        <div class="card text-white bg-primary">
-            <div class="card-body">
-                <h5 class="card-title">Prácticas Disponibles</h5>
-                <p class="card-text">{{ practicas|length }} oportunidades</p>
-            </div>
+        <h2>Bienvenido, {{ nombre }}</h2>
+        <div class="mt-2">
+            {% if rol == 'admin' %}
+            <a href="{{ url_for('admin') }}" class="btn btn-outline-primary me-2"><i class="bi bi-gear"></i> Panel de Administración</a>
+            {% endif %}
+            {% if rol == 'estudiante' %}
+            <a href="{{ url_for('mis_postulaciones') }}" class="btn btn-warning text-dark fw-bold"><i class="bi bi-list-check"></i> Mis Postulaciones</a>
+            {% endif %}
         </div>
     </div>
+    <div class="dashboard-stats-card">
+        <div>Prácticas Disponibles</div>
+        <div style="font-size:2.2rem; font-weight:800; color:#0d6efd;">{{ practicas|length }}</div>
+        <div style="font-size:1rem; color:#6c757d;">Oportunidades activas</div>
+    </div>
 </div>
 
-<h3 class="mt-4 mb-3">Ofertas de Prácticas</h3>
+<h3 class="mt-4 mb-3" style="font-weight:700; color:#0d6efd;">Ofertas de Prácticas</h3>
 <div class="row">
     {% for practica in practicas %}
     <div class="col-md-6 mb-4">
-        <div class="card h-100">
+        <div class="card dashboard-oferta-card h-100">
             <div class="card-header">
                 <h5>{{ practica.titulo }}</h5>
                 <small class="text-muted">{{ practica.empresa }} - {{ practica.area }}</small>
@@ -48,7 +40,7 @@
                 <p><strong>Duración:</strong> {{ practica.duracion }}</p>
                 <p><strong>Contacto:</strong> {{ practica.contacto }}</p>
             </div>
-            <div class="card-footer bg-transparent">
+            <div class="card-footer bg-transparent border-0">
                 {% if rol == 'estudiante' %}
                 <form action="{{ url_for('postular_practica', practica_id=practica.id) }}" method="POST">
                     <button class="btn btn-outline-primary w-100" type="submit">Postularme</button>
