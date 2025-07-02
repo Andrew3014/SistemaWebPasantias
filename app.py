@@ -68,6 +68,8 @@ def register():
         password_raw = request.form['password']
         nombre = ' '.join([n.capitalize() for n in request.form['nombre'].strip().split()])
         apellido = ' '.join([a.capitalize() for a in request.form['apellido'].strip().split()])
+        telefono = request.form['telefono']
+        carrera = request.form['carrera']
 
         # Validación de longitud y caracteres de nombre y apellido
         if not (2 <= len(nombre) <= 30) or not nombre.replace(' ', '').isalpha():
@@ -86,24 +88,22 @@ def register():
         if not (7 <= len(telefono) <= 15):
             flash('El teléfono debe tener entre 7 y 15 dígitos.', 'danger')
             return render_template('register.html', carreras=carreras)
-        telefono = request.form['telefono']
-        carrera = request.form['carrera']
-        
+
         # Validación de correo institucional
         if not email.endswith('@upds.edu.bo'):
             flash('Solo se permiten correos institucionales (@upds.edu.bo)', 'danger')
             return render_template('register.html', carreras=carreras)
-        
+
         # Validación de teléfono solo números
         if not telefono.isdigit():
             flash('El teléfono solo debe contener números.', 'danger')
             return render_template('register.html', carreras=carreras)
-        
+
         # Validación de longitud mínima de contraseña
         if len(password_raw) < 8:
             flash('La contraseña debe tener al menos 8 caracteres.', 'danger')
             return render_template('register.html', carreras=carreras)
-        
+
         # Validación de combinación única nombre+apellido
         for u in get_all_usuarios():
             u_nombre = ' '.join([n.capitalize() for n in u['nombre'].strip().split()])
@@ -111,7 +111,7 @@ def register():
             if u_nombre == nombre and u_apellido == apellido:
                 flash('Ya existe un usuario con ese nombre y apellido.', 'danger')
                 return render_template('register.html', carreras=carreras)
-        
+
         # Usar bcrypt para generar el hash de la contraseña
         password = bcrypt.generate_password_hash(password_raw).decode('utf-8')
         try:
@@ -151,6 +151,10 @@ def edit_usuario(user_id):
     if request.method == 'POST':
         nombre = ' '.join([n.capitalize() for n in request.form['nombre'].strip().split()])
         apellido = ' '.join([a.capitalize() for a in request.form['apellido'].strip().split()])
+        email = request.form['email']
+        telefono = request.form['telefono']
+        carrera = request.form['carrera']
+        nueva_contrasena = request.form.get('nueva_contrasena', '').strip()
 
         # Validación de longitud y caracteres de nombre y apellido
         if not (2 <= len(nombre) <= 30) or not nombre.replace(' ', '').isalpha():
@@ -173,10 +177,12 @@ def edit_usuario(user_id):
             flash('El teléfono debe tener entre 7 y 15 dígitos.', 'danger')
             user = get_usuario_by_id(user_id)
             return render_template('edit_usuario.html', user=user, carreras=carreras)
-        email = request.form['email']
-        telefono = request.form['telefono']
-        carrera = request.form['carrera']
-        nueva_contrasena = request.form.get('nueva_contrasena', '').strip()
+
+        # Validación de teléfono solo números
+        if not telefono.isdigit():
+            flash('El teléfono solo debe contener números.', 'danger')
+            user = get_usuario_by_id(user_id)
+            return render_template('edit_usuario.html', user=user, carreras=carreras)
         try:
             if nueva_contrasena:
                 if len(nueva_contrasena) < 8:
